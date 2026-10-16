@@ -20,6 +20,8 @@ export interface Bureau {
   requests: GhostRequest[];
   places: Place[];
   manual: Record<string, string | null>;
+  /** Какие заявки оператор уже разобрал (для прогресса пошагового режима). */
+  reviewed: Record<string, boolean>;
   now: string;
   /** Результат решателя либо null, если данные не удалось обработать. */
   result: SolveResult | null;
@@ -27,6 +29,7 @@ export interface Bureau {
   error: string | null;
   faulty: boolean;
 
+  markReviewed: (requestId: string) => void;
   assignManual: (requestId: string, placeId: string) => void;
   clearManual: (requestId: string) => void;
   removeRequest: (requestId: string) => void;
@@ -38,6 +41,7 @@ export interface Bureau {
 export function useBureau(): Bureau {
   const [requests, setRequests] = useState<GhostRequest[]>(SEED_REQUESTS);
   const [manual, setManual] = useState<Record<string, string | null>>({});
+  const [reviewed, setReviewed] = useState<Record<string, boolean>>({});
   const [faulty, setFaulty] = useState(false);
   const places = SEED_PLACES;
   const now = NOW;
@@ -61,8 +65,14 @@ export function useBureau(): Bureau {
     }
   }, [effectiveRequests, places, manual, now]);
 
+  // Отметить заявку как разобранную оператором (для прогресса пошагового режима).
+  const markReviewed = useCallback((requestId: string) => {
+    setReviewed((r) => ({ ...r, [requestId]: true }));
+  }, []);
+
   const assignManual = useCallback((requestId: string, placeId: string) => {
     setManual((m) => ({ ...m, [requestId]: placeId }));
+    setReviewed((r) => ({ ...r, [requestId]: true })); // ручной выбор = решение принято
   }, []);
 
   const clearManual = useCallback((requestId: string) => {
@@ -80,16 +90,23 @@ export function useBureau(): Bureau {
       delete next[requestId];
       return next;
     });
+    setReviewed((r) => {
+      const next = { ...r };
+      delete next[requestId];
+      return next;
+    });
   }, []);
 
   const clearAllRequests = useCallback(() => {
     setRequests([]);
     setManual({});
+    setReviewed({});
   }, []);
 
   const reset = useCallback(() => {
     setRequests(SEED_REQUESTS);
     setManual({});
+    setReviewed({});
     setFaulty(false);
   }, []);
 
@@ -99,10 +116,12 @@ export function useBureau(): Bureau {
     requests: effectiveRequests,
     places,
     manual,
+    reviewed,
     now,
     result,
     error,
     faulty,
+    markReviewed,
     assignManual,
     clearManual,
     removeRequest,

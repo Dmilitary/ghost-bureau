@@ -3,25 +3,40 @@ import { useBureau } from './state/useBureau';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Dispatcher } from './components/Dispatcher';
 import { Report } from './components/Report';
+import { Monitoring } from './components/Monitoring';
 import { Worklog } from './components/Worklog';
+import { Welcome } from './components/Welcome';
 
-type Tab = 'disp' | 'report' | 'worklog';
+type Tab = 'disp' | 'monitor' | 'report' | 'worklog';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'disp', label: 'Диспетчерская' },
+  { id: 'monitor', label: 'Мониторинг' },
   { id: 'report', label: 'Отчёт' },
   { id: 'worklog', label: 'AI Worklog' },
 ];
 
+const WELCOME_KEY = 'gb-welcome-seen';
+
 export default function App() {
   const bureau = useBureau();
   const [tab, setTab] = useState<Tab>('disp');
+  // Приветственный экран открыт при первом визите (запоминаем выбор).
+  const [welcomeOpen, setWelcomeOpen] = useState(
+    () => localStorage.getItem(WELCOME_KEY) !== '1',
+  );
 
   const unresolved =
     bureau.result?.outcomes.filter((o) => !o.assignedPlaceId).length ?? 0;
 
+  const closeWelcome = () => {
+    localStorage.setItem(WELCOME_KEY, '1');
+    setWelcomeOpen(false);
+  };
+
   return (
     <>
+      {welcomeOpen && <Welcome onStart={closeWelcome} />}
       <div className="app">
         <div className="shell">
           <header className="hdr">
@@ -30,6 +45,13 @@ export default function App() {
               <div className="hdr__sub">Ночная смена · пульт оператора</div>
             </div>
             <div className="hdr__status">
+              <button
+                className="hdr__help"
+                onClick={() => setWelcomeOpen(true)}
+                title="Что это за продукт и зачем"
+              >
+                ? О продукте
+              </button>
               <Clock />
               <span className="rec">
                 <span className="rec__dot" /> СМЕНА АКТИВНА
@@ -47,7 +69,7 @@ export default function App() {
                 onClick={() => setTab(t.id)}
               >
                 {t.label}
-                {t.id === 'report' && unresolved > 0 && (
+                {t.id === 'monitor' && unresolved > 0 && (
                   <span className="tab__badge">{unresolved}</span>
                 )}
               </button>
@@ -56,7 +78,13 @@ export default function App() {
 
           <main>
             <ErrorBoundary>
-              {tab === 'disp' && <Dispatcher bureau={bureau} />}
+              {tab === 'disp' && (
+                <Dispatcher
+                  bureau={bureau}
+                  onFinish={() => setTab('monitor')}
+                />
+              )}
+              {tab === 'monitor' && <Monitoring bureau={bureau} />}
               {tab === 'report' && <Report bureau={bureau} />}
               {tab === 'worklog' && <Worklog />}
             </ErrorBoundary>
