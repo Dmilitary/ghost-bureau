@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="4" fill="#0b0a07"/>
+  <!-- спектральный сигнал: привидение как волна -->
+  <path d="M4 17 h3 l2 -5 l2.5 9 l2.5 -13 l2.5 13 l2.5 -9 l2 5 h4"
+        fill="none" stroke="#ffb454" stroke-width="1.6"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="26.5" cy="7.5" r="1.8" fill="#5be08b"/>
+</svg>
