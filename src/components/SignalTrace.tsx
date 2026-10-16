@@ -57,11 +57,7 @@ function staticWave(seed: string): string {
 }
 
 export function SignalTrace({ score, compatible, seed }: Props) {
-  const color = !compatible
-    ? 'var(--alarm)'
-    : score >= 0.75
-      ? 'var(--signal)'
-      : 'var(--amber)';
+  const color = compatible ? 'var(--green)' : 'var(--red)';
   const points = compatible ? cleanWave(score, seed) : staticWave(seed);
 
   return (
@@ -77,10 +73,10 @@ export function SignalTrace({ score, compatible, seed }: Props) {
       }
     >
       {/* сетка осциллографа */}
-      <line x1="0" y1={MID} x2={W} y2={MID} stroke="var(--line)" strokeWidth="1" />
-      <line x1={W / 4} y1="0" x2={W / 4} y2={H} stroke="var(--line)" strokeWidth="0.5" />
-      <line x1={W / 2} y1="0" x2={W / 2} y2={H} stroke="var(--line)" strokeWidth="0.5" />
-      <line x1={(W / 4) * 3} y1="0" x2={(W / 4) * 3} y2={H} stroke="var(--line)" strokeWidth="0.5" />
+      <line x1="0" y1={MID} x2={W} y2={MID} stroke="var(--border)" strokeWidth="1" />
+      <line x1={W / 4} y1="0" x2={W / 4} y2={H} stroke="var(--border)" strokeWidth="0.5" />
+      <line x1={W / 2} y1="0" x2={W / 2} y2={H} stroke="var(--border)" strokeWidth="0.5" />
+      <line x1={(W / 4) * 3} y1="0" x2={(W / 4) * 3} y2={H} stroke="var(--border)" strokeWidth="0.5" />
       <polyline
         points={points}
         fill="none"

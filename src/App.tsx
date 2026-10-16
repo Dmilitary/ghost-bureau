@@ -22,8 +22,6 @@ export default function App() {
 
   return (
     <>
-      <div className="crt" aria-hidden="true" />
-      <Boot />
       <div className="app">
         <div className="shell">
           <header className="hdr">
@@ -97,20 +95,4 @@ function Clock() {
 function formatTime(d: Date): string {
   const p = (n: number) => String(n).padStart(2, '0');
   return `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
-}
-
-function Boot() {
-  const [done, setDone] = useState(false);
-  useEffect(() => {
-    const id = setTimeout(() => setDone(true), 2200);
-    return () => clearTimeout(id);
-  }, []);
-  if (done) return null;
-  return (
-    <div className="boot" aria-hidden="true">
-      <div className="boot__line">ИНИЦИАЛИЗАЦИЯ ПУЛЬТА…</div>
-      <div className="boot__brand">БЮРО ПЕРЕСЕЛЕНИЯ ПРИВИДЕНИЙ</div>
-      <div className="boot__line blink">▌</div>
-    </div>
-  );
 }

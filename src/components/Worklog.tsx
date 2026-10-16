@@ -20,11 +20,11 @@ export function Worklog() {
         </div>
         <div className="wl__metacell">
           <div className="wl__role">Время разработки</div>
-          <div style={{ color: 'var(--amber-bright)' }}>{WORKLOG.time}</div>
+          <div style={{ color: 'var(--text)', fontWeight: 700 }}>{WORKLOG.time}</div>
         </div>
         <div className="wl__metacell">
           <div className="wl__role">Расход токенов</div>
-          <div style={{ color: 'var(--amber-dim)', fontSize: 'var(--fs-sm)' }}>
+          <div style={{ color: 'var(--text-2)', fontSize: 'var(--fs-sm)' }}>
             {WORKLOG.tokens}
           </div>
         </div>
@@ -46,7 +46,7 @@ export function Worklog() {
             </div>
             <div>
               <div className="wl__role">Что делал AI</div>
-              <div style={{ fontSize: 'var(--fs-sm)', color: 'var(--amber-dim)' }}>
+              <div style={{ fontSize: 'var(--fs-sm)', color: 'var(--text-2)' }}>
                 {s.ai}
               </div>
             </div>
