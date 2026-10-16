@@ -611,11 +611,18 @@ function DeadlineChip({
         : '';
   const label =
     status === 'overdue'
-      ? `просрочено на ${Math.abs(days)} дн`
+      ? `дедлайн просрочен на ${Math.abs(days)} дн`
       : days === 0
         ? 'дедлайн сегодня'
-        : `через ${days} дн`;
-  return <span className={`chip ${cls}`}>⧗ {label}</span>;
+        : `дедлайн через ${days} дн`;
+  return (
+    <span
+      className={`chip ${cls}`}
+      title={`Переселить до ${outcome.request.deadline}`}
+    >
+      ⧗ {label}
+    </span>
+  );
 }
 
 function DataErrorScreen({

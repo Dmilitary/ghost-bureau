@@ -69,6 +69,33 @@ export function Worklog() {
         title="Что улучшил бы в реальном продукте"
         items={WORKLOG.future}
       />
+
+      <div className="wl__stage">
+        <div className="wl__stagehead">
+          <span className="wl__stagetitle">
+            Инженерные практики, которые я применяю на боевых проектах
+          </span>
+        </div>
+        <p
+          style={{
+            fontSize: 'var(--fs-sm)',
+            color: 'var(--text-3)',
+            margin: '0 0 1rem',
+          }}
+        >
+          {WORKLOG.practicesNote}
+        </p>
+        {WORKLOG.practices.map((g) => (
+          <div key={g.area} style={{ marginBottom: '1rem' }}>
+            <div className="wl__role">{g.area}</div>
+            <ul className="wl__list">
+              {g.items.map((it, i) => (
+                <li key={i}>{it}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
